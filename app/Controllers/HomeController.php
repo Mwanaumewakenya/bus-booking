@@ -161,6 +161,21 @@ class HomeController extends BaseController
             // Get booking details
             $booking = $this->bookingModel->getBookingWithDetails($bookingId);
 
+            // Send booking confirmation email
+            try {
+                $emailService = new \App\Services\EmailService();
+                $bookingData = array_merge($booking, [
+                    'payment_url' => url("payment/{$bookingId}"),
+                    'booking_url' => url("booking/{$booking['ref_no']}")
+                ]);
+                $emailService->sendBookingConfirmation($bookingData);
+            } catch (Exception $e) {
+                $this->logger->error('Failed to send booking confirmation email', [
+                    'booking_id' => $bookingId,
+                    'error' => $e->getMessage()
+                ]);
+            }
+
             $this->setSuccess('Booking created successfully! Your reference number is: ' . $booking['ref_no']);
             
             // Redirect to payment if booking is unpaid
