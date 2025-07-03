@@ -81,6 +81,19 @@ $app->post('/bookings/{id}', [BookingController::class, 'update']);
 $app->post('/bookings/{id}/delete', [BookingController::class, 'delete']);
 $app->post('/bookings/{id}/toggle-status', [BookingController::class, 'toggleStatus']);
 
+// Payment Routes
+$app->get('/payment/{id}', [PaymentController::class, 'showPaymentForm']);
+$app->post('/payment/mpesa', [PaymentController::class, 'processMpesaPayment']);
+$app->get('/payment/status/{id}', [PaymentController::class, 'showPaymentStatus']);
+$app->get('/api/payment/status/{id}', [PaymentController::class, 'checkPaymentStatus']);
+$app->post('/api/mpesa/callback', [PaymentController::class, 'handleMpesaCallback']);
+
+// Admin Payment Management
+$app->get('/admin/payments', [PaymentController::class, 'index']);
+$app->get('/admin/payments/{id}', [PaymentController::class, 'show']);
+$app->get('/admin/payments/reports', [PaymentController::class, 'reports']);
+$app->post('/admin/payments/{id}/retry', [PaymentController::class, 'retryPayment']);
+
 // Account Management Routes
 $app->get('/profile', [ProfileController::class, 'show']);
 $app->post('/profile', [ProfileController::class, 'update']);

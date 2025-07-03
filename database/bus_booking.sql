@@ -208,6 +208,44 @@ ALTER TABLE `schedule_list`
 --
 ALTER TABLE `users`
   MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Table structure for table `payments`
+--
+
+CREATE TABLE `payments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `booking_id` int(11) NOT NULL,
+  `transaction_id` varchar(255) DEFAULT NULL,
+  `checkout_request_id` varchar(255) DEFAULT NULL,
+  `merchant_request_id` varchar(255) DEFAULT NULL,
+  `phone_number` varchar(20) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `payment_method` enum('mpesa','cash','card') NOT NULL DEFAULT 'mpesa',
+  `status` enum('pending','completed','failed','cancelled') NOT NULL DEFAULT 'pending',
+  `response_data` text,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_booking_id` (`booking_id`),
+  KEY `idx_transaction_id` (`transaction_id`),
+  KEY `idx_checkout_request_id` (`checkout_request_id`),
+  KEY `idx_phone_number` (`phone_number`),
+  KEY `idx_status` (`status`),
+  KEY `idx_payment_method` (`payment_method`),
+  KEY `idx_created_at` (`created_at`),
+  KEY `idx_amount` (`amount`),
+  KEY `idx_status_method` (`status`, `payment_method`),
+  KEY `idx_booking_status` (`booking_id`, `status`),
+  CONSTRAINT `fk_payments_booking` FOREIGN KEY (`booking_id`) REFERENCES `booked` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- AUTO_INCREMENT for table `payments`
+--
+ALTER TABLE `payments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

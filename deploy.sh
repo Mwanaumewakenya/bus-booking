@@ -126,7 +126,7 @@ setup_environment() {
     
     if [ ! -f "$APP_DIR/.env" ]; then
         sudo -u $WEB_USER cp $APP_DIR/.env.example $APP_DIR/.env
-        print_warning "Environment file created from template. Please configure database settings."
+        print_warning "Environment file created from template. Please configure database and M-Pesa settings."
     fi
     
     print_success "Environment configuration ready"
@@ -274,9 +274,10 @@ show_completion_message() {
     echo "Next steps:"
     echo "1. Configure your domain name in web server configuration"
     echo "2. Update database credentials in .env file"
-    echo "3. Set up SSL certificate for HTTPS"
-    echo "4. Change default admin credentials (username: admin, password: admin123)"
-    echo "5. Configure email settings for notifications"
+    echo "3. Configure M-Pesa API credentials in .env file"
+    echo "4. Set up SSL certificate for HTTPS"
+    echo "5. Change default admin credentials (username: admin, password: admin123)"
+    echo "6. Configure email settings for notifications"
     echo
     echo "Application location: $APP_DIR"
     echo "Backup location: $BACKUP_DIR"

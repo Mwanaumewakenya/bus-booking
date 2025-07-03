@@ -162,7 +162,13 @@ class HomeController extends BaseController
             $booking = $this->bookingModel->getBookingWithDetails($bookingId);
 
             $this->setSuccess('Booking created successfully! Your reference number is: ' . $booking['ref_no']);
-            $this->redirect(url("booking/{$booking['ref_no']}"));
+            
+            // Redirect to payment if booking is unpaid
+            if ($booking['status'] == Booking::STATUS_UNPAID) {
+                $this->redirect(url("payment/{$bookingId}"));
+            } else {
+                $this->redirect(url("booking/{$booking['ref_no']}"));
+            }
 
         } catch (Exception $e) {
             $this->bookingModel->rollback();
